@@ -1,0 +1,39 @@
+package com.example.floracare.provider
+
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.content.UriMatcher
+import android.database.Cursor
+import android.net.Uri
+import com.example.floracare.data.local.AppDatabase
+
+class PlantContentProvider : ContentProvider() {
+    private val authority = "com.example.floracare.provider"
+    private val plants = 1
+    private val plantId = 2
+    private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
+        addURI(authority, "plants", plants)
+        addURI(authority, "plants/#", plantId)
+    }
+
+    override fun onCreate(): Boolean = true
+
+    override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
+        val dao = AppDatabase.get(context!!).plantDao()
+        val cursor = when (matcher.match(uri)) {
+            plants -> dao.providerQueryAll()
+            plantId -> dao.providerQueryOne(uri.lastPathSegment!!.toInt())
+            else -> throw IllegalArgumentException("URI inconnue : $uri")
+        }
+        cursor.setNotificationUri(context!!.contentResolver, uri)
+        return cursor
+    }
+    override fun getType(uri: Uri): String = when (matcher.match(uri)) {
+        plants -> "vnd.android.cursor.dir/vnd.com.example.floracare.provider.plants"
+        plantId -> "vnd.android.cursor.item/vnd.com.example.floracare.provider.plants"
+        else -> throw IllegalArgumentException("URI inconnue")
+    }
+    override fun insert(uri: Uri, values: ContentValues?): Uri? = throw UnsupportedOperationException("Lecture seule")
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = throw UnsupportedOperationException("Lecture seule")
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int = throw UnsupportedOperationException("Lecture seule")
+}
