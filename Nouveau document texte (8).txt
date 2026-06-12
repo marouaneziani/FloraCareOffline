@@ -1,7 +1,0 @@
-package com.example.floracare.data.models
-
-data class AuthResponseDto(
-    val token: String,
-    val user: UserDto,
-    val message: String? = null
-)
