@@ -1,9 +1,0 @@
-package com.example.floracare.data.local
-
-import androidx.room.TypeConverter
-import com.example.floracare.utils.SyncStatus
-
-class Converters {
-    @TypeConverter fun statusToString(status: SyncStatus): String = status.name
-    @TypeConverter fun stringToStatus(value: String): SyncStatus = SyncStatus.valueOf(value)
-}
