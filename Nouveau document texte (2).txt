@@ -1,0 +1,23 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <permission android:name="com.example.floracare.permission.READ_PLANTS" android:protectionLevel="dangerous" />
+
+    <application android:theme="@style/Theme.FloraCare" android:label="FloraCare" android:allowBackup="true" android:supportsRtl="true">
+
+        <provider android:name=".provider.PlantContentProvider" android:authorities="com.example.floracare.provider" android:exported="true" android:readPermission="com.example.floracare.permission.READ_PLANTS" />
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+        </provider>
+        <activity android:name=".ui.detail.PlantDetailActivity" />
+        <activity android:name=".ui.list.PlantListActivity" />
+        <activity android:name=".ui.activities.RegisterActivity" />
+        <activity android:name=".ui.activities.LoginActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
